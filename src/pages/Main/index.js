@@ -89,8 +89,8 @@ export default function Main() {
               key={index}
               icon={day?.condition}
               name={day?.date}
-              temp={day?.min}
-              hour={day?.max}
+              min={day?.min}
+              max={day?.max}
             />))}
         </Week>)}
     </Container>
