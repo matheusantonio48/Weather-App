@@ -18,13 +18,21 @@ npm install
 E para rodar a aplicação você pode utilizar:
 
 ```sh
-yarn android
+yarn android 
+```
+
+```sh
+yarn ios 
 ```
 
 ou 
 
 ```sh
 npx react native run-android
+```
+
+```sh
+npx react native run-ios
 ```
 
 

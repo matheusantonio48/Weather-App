@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, PermissionsAndroid, ScrollView, RefreshControl, ToastAndroid  } from 'react-native';
+import React, { useEffect } from 'react';
+import Geolocation from 'react-native-geolocation-service';
+import { Platform, PermissionsAndroid, ScrollView, RefreshControl, ToastAndroid, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import forecast from '~/store/actions/index';
 import Card from '~/components/card';
@@ -24,7 +25,6 @@ export default function Main() {
   const isLoading = useSelector(state => state.forecast.loading);
   const fdata = useSelector(state => state.forecast.weatherForecast.slice(2, 8));
   const dispatch = useDispatch();
-  const [erorr, setError] = useState(false);
 
 
   async function requestPermissions() {
@@ -38,22 +38,26 @@ export default function Main() {
       } else {
         ToastAndroid.show("O GPS está desabilitado.", ToastAndroid.SHORT);
       }
-    }
+    } 
+    if(Platform.OS === "ios"){
+      const status = await Geolocation.requestAuthorization("always"); 
+      if (status === "granted") {
+        dispatch(forecast())
+      }
+   }else{
+      Alert.alert("O GPS está desabilitado.");
+   }
   }
 
   useEffect(() => {
     requestPermissions()
-    loadRealm()
-  }, [loadRealm])
-
-  const loadRealm = async () => {}
+  }, [])
 
   function refreshing() {
     dispatch(forecast())
   }
 
   return (
-
     <Container>
       {isLoading ? <Loading /> :
         <ScrollView
